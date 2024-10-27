@@ -4,4 +4,5 @@ helpers/__pycache__/*
 venv/
 k8s/
 .env
+.DS_Store
 *.log
