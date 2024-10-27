@@ -1,0 +1,7 @@
+__pycache__/*
+clients/__pycache__/*
+helpers/__pycache__/*
+venv/
+k8s/
+.env
+*.log
