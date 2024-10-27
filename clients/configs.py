@@ -5,9 +5,3 @@ RETRYABLE_HTTP_STATUS_CODES = [
     502,
     504,
 ]
-
-
-DNS_NAMES_TO_UPDATE = [
-    "brayanayala.com",
-    "www.brayanayala.com",
-]

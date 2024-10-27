@@ -1,7 +1,7 @@
 import requests
 import logging
 
-from clients.constants import RETRYABLE_HTTP_STATUS_CODES
+from clients.configs import RETRYABLE_HTTP_STATUS_CODES
 from helpers.retry import with_retries
 from helpers.retry.exceptions import Retry
 

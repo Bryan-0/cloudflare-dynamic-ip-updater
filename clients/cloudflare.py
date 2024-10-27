@@ -3,8 +3,6 @@ import logging
 import os
 from cloudflare import Cloudflare
 
-from clients.configs import DNS_NAMES_TO_UPDATE
-
 
 class CloudflareClient:
     def __init__(self) -> None:
@@ -14,6 +12,9 @@ class CloudflareClient:
             max_retries=3,
         )
         self._zone_id = os.environ.get("CLOUDFLARE_ZONE_ID")
+        self._dns_names_to_update = os.environ.get(
+            "CLOUDFLARE_DOMAINS_TO_UPDATE", ""
+        ).split(",")
         self._logger = logging.getLogger("dynamic_ip_updater")
 
     def get_current_ip_alias_in_website_dns(self, web_domain_name: str) -> str:
@@ -27,16 +28,14 @@ class CloudflareClient:
 
         return dns_record["result"][0].get("content")
 
-    def update_alias_websites_with_public_ip(
-        self, new_ip: str, domain_names_to_update: list[str] = DNS_NAMES_TO_UPDATE
-    ):
+    def update_alias_websites_with_public_ip(self, new_ip: str):
         dns_records = self._client.dns.records.list(
             zone_id=self._zone_id, type="A"
         ).to_dict()
         current_utc_time = datetime.now(timezone.utc)
 
         for dns in dns_records["result"]:
-            if dns["name"] in domain_names_to_update:
+            if dns["name"] in self._dns_names_to_update:
                 self._logger.info(f"Updating domain {dns["name"]} with new ip {new_ip}")
                 self._client.dns.records.update(
                     dns_record_id=dns["id"],
