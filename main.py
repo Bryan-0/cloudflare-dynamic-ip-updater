@@ -1,6 +1,7 @@
 import logging
 import os
 from clients.cloudflare import CloudflareClient
+from clients.sns import SNS
 from helpers import env, logging_config
 from clients.ip import IPv4
 
@@ -23,7 +24,11 @@ def main():
         )
         return
 
-    cloudflare.update_alias_websites_with_public_ip(current_public_ip)
+    cloudflare.update_alias_websites_with_public_ip(new_ip=current_public_ip)
+    SNS().publish(
+        topic_arn=os.environ.get("SNS_TOPIC_ARN"),
+        message=f"Cloudflare DNS alias records have been updated with new IP: {current_public_ip}",
+    )
 
 
 if __name__ == "__main__":
