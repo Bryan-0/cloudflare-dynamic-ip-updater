@@ -4,11 +4,14 @@ from clients.cloudflare import CloudflareClient
 from clients.sns import SNS
 from helpers import env, logging_config
 from clients.ip import IPv4
+from opentelemetry import trace
 
 
+tracer = trace.get_tracer("cloudflare_dynamic_ip_updater")
 logger = logging.getLogger("dynamic_ip_updater")
 
 
+@tracer.start_as_current_span("cloudflare_dynamic_ip_workflow")
 def main():
     logger.info("Starting dynamic ip updater check process...")
 

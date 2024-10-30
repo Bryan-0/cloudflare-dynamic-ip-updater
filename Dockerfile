@@ -1,9 +1,12 @@
-FROM python:3.12-alpine
+FROM python:3.12-slim
 
 WORKDIR /cloudflare_dynamic_ip_updater
 
 COPY requirements.txt requirements.txt
 RUN python3 -m pip install -r requirements.txt
+
+RUN python3 -m pip install 'opentelemetry-distro[otlp]'
+RUN opentelemetry-bootstrap -a install
 
 COPY . .
 
