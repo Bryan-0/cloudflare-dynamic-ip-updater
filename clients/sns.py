@@ -8,7 +8,7 @@ class SNS:
         self._logger = logging.getLogger("dynamic_ip_updater")
 
     def publish(self, topic_arn: str, message: str) -> None:
-        self._logger(f"Sending SNS message to topic {topic_arn}")
+        self._logger.info(f"Sending SNS message to topic {topic_arn}")
         try:
             self.client.publish(
                 TopicArn=topic_arn,
